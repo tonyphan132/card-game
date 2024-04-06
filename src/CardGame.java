@@ -5,10 +5,12 @@ public class CardGame {
     ArrayList<Card> deck;
     ArrayList<Card> playerDeck;
     ArrayList<Card> computerDeck;
-    int playerPoint;
-    int computerPoint;
+    static int playerPoint;
+    static int computerPoint;
 
     CardGame(){
+        playerPoint = 0;
+        computerPoint = 0;
         buildDeck();
         shuffleDeck();
         distributeDeck();
@@ -16,23 +18,60 @@ public class CardGame {
 
     public static void main(String[] args){
         CardGame game = new CardGame();
-
     }
 
 
     private class Card {
-        private String suit;
-        private String rank;
+        private final String suit;
+        private final String rank;
 
         public Card(String suit, String rank) {
             this.suit = suit;
             this.rank = rank;
         }
 
+        public String getSuit() {
+            return suit;
+        }
+
+        public String getRank() {
+            return rank;
+        }
+
+        public int getCardValue(){
+            String faceCards = "AKQJ";
+            if (faceCards.contains(rank)){
+                switch(rank){
+                    case "A":
+                        return 14;
+                    case "K":
+                        return 13;
+                    case "Q":
+                        return 12;
+                    case "J":
+                        return 11;
+                }
+            }
+            return Integer.parseInt(rank);
+        }
+
         public String toString() {
             return rank + "-" + suit;
         }
+
+        public static void compareCards(Card playerCard, Card computerCard){
+            int playerCardValue = playerCard.getCardValue();
+            int computerCardValue = computerCard.getCardValue();
+            if (playerCardValue > computerCardValue){
+                playerPoint = playerPoint + (playerCardValue - computerCardValue);
+            }
+            else if (playerCardValue < computerCardValue){
+                computerPoint = computerPoint + (computerCardValue - playerCardValue);
+            }
+        }
     }
+
+
 
     private void buildDeck(){
         this.deck = new ArrayList<>(52);
@@ -49,7 +88,7 @@ public class CardGame {
         Random random = new Random();
         for (int i = 0; i < 260; i++){
             int index1 = random.nextInt(52);
-            int index2 = 0;
+            int index2;
             do{
                 index2 = random.nextInt(52);
             }while(index1 == index2);
