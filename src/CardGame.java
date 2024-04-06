@@ -1,10 +1,13 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class CardGame {
     ArrayList<Card> deck;
     CardGame(){
         buildDeck();
+        shuffleDeck();
     }
+
     public static void main(String[] args){
         CardGame game = new CardGame();
         ArrayList<Card> deck = game.deck;
@@ -12,6 +15,7 @@ public class CardGame {
             System.out.println(element);
         }
     }
+
     private class Card{
         private String suit;
         private String rank;
@@ -24,6 +28,7 @@ public class CardGame {
         }
 
     }
+
     public void buildDeck(){
         this.deck = new ArrayList<>(52);
         String[] suitArr = {"Heart", "Diamond", "Club", "Spade"};
@@ -35,7 +40,19 @@ public class CardGame {
         }
     }
 
-
+    public void shuffleDeck(){
+        Random random = new Random();
+        for (int i = 0; i < 260; i++){
+            int index1 = random.nextInt(52);
+            int index2 = 0;
+            do{
+                index2 = random.nextInt(52);
+            }while(index1 == index2);
+            Card temp = deck.get(index1);
+            deck.set(index1, deck.get(index2));
+            deck.set(index2, temp);
+        }
+    }
 }
 
 
