@@ -56,7 +56,7 @@ public class CardGame {
         }
 
         public String toString() {
-            return rank + "-" + suit;
+            return suit + "-" + rank;
         }
 
         public static void compareCards(Card playerCard, Card computerCard){
@@ -70,8 +70,6 @@ public class CardGame {
             }
         }
     }
-
-
 
     private void buildDeck(){
         this.deck = new ArrayList<>(52);
