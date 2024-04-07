@@ -5,7 +5,6 @@ import java.util.Random;
 import javax.swing.*;
 import java.awt.*;
 
-//Points will be earned depending on difference of ranks played.
 public class CardGame {
     ArrayList<Card> deck;
     ArrayList<Card> playerDeck;
@@ -196,6 +195,9 @@ public class CardGame {
         }
     }
 
+    /**
+     * Method will build a deck of 52 cards using a combination of 13 values and of 4 suits.
+     */
     private void buildDeck(){
         this.deck = new ArrayList<>(52);
         String[] suitArr = {"Heart", "Diamond", "Club", "Spade"};
@@ -207,6 +209,10 @@ public class CardGame {
         }
     }
 
+    /**
+     * Method shuffles deck by randomly swapping cards multiple times.
+     * Will iterate 260 times and will swap two random cards everytime.
+     */
     private void shuffleDeck(){
         for (int i = 0; i < 260; i++){
             int index1 = random.nextInt(52);
@@ -220,6 +226,11 @@ public class CardGame {
         }
     }
 
+    /**
+     * Method will distribute cards from deck to player's and computer's hands.
+     * Each deck receives 5 random cards
+     *
+     */
     private void distributeDeck(){
         playerDeck = new ArrayList<>(5);
         computerDeck = new ArrayList<>(5);
