@@ -14,9 +14,11 @@ public class CardGame {
     static int computerPoint;
     JFrame frame = new JFrame("Card Game");
     JButton[] buttonArr = new JButton[5];
+    JButton playAgainButton;
     Random random = new Random();
     JLabel score = new JLabel();
-    JPanel buttonPanel = new JPanel();
+    JPanel playAgainButtonPanel = new JPanel();
+    JPanel playButtonPanel = new JPanel();
     JPanel backgroundPanel = new JPanel(){
         @Override
         public void paintComponent(Graphics g){
@@ -61,79 +63,45 @@ public class CardGame {
         //Setting panel + text + buttons
         backgroundPanel.setLayout(new BorderLayout());
         backgroundPanel.setBackground(new Color(34,145,34));
-        buttonArr[0] = new JButton("Play card 1!");
-        buttonArr[1] = new JButton("Play card 2!");
-        buttonArr[2] = new JButton("Play card 3!");
-        buttonArr[3] = new JButton("Play card 4!");
-        buttonArr[4] = new JButton("Play card 5!");
+        playAgainButton = new JButton("Play again");
+        buttonArr[0] = new JButton("Play card 1");
+        buttonArr[1] = new JButton("Play card 2");
+        buttonArr[2] = new JButton("Play card 3");
+        buttonArr[3] = new JButton("Play card 4");
+        buttonArr[4] = new JButton("Play card 5");
         for (JButton element: buttonArr){
             element.setFocusable(false);
-            buttonPanel.add(element);
+            playButtonPanel.add(element);
         }
+        playAgainButtonPanel.add(playAgainButton);
         validComputerDeck = new ArrayList<>(computerDeck);
-        buttonArr[0].addActionListener(new ActionListener() {
+        for (int i = 0; i < buttonArr.length; i++){
+            int j = i;
+            buttonArr[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Card playerCard = playerDeck.get(j);
+                    int index = random.nextInt(validComputerDeck.size());
+                    Card compCard = validComputerDeck.remove(index);
+                    buttonArr[j].setEnabled(false);
+                    compareCards(playerCard, compCard);
+                    updateScoreLabel();
+                    frame.repaint();
+                }
+            });
+        }
+
+        playAgainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Card playerCard = playerDeck.get(0);
-                int index = random.nextInt(validComputerDeck.size());
-                Card compCard = validComputerDeck.remove(index);
-                buttonArr[0].setEnabled(false);
-                compareCards(playerCard, compCard);
-                updateScoreLabel();
-                frame.repaint();
+                playAgain();
             }
         });
-        buttonArr[1].addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Card playerCard = playerDeck.get(1);
-                int index = random.nextInt(validComputerDeck.size());
-                Card compCard = validComputerDeck.remove(index);
-                buttonArr[1].setEnabled(false);
-                compareCards(playerCard, compCard);
-                updateScoreLabel();
-                frame.repaint();
-            }
-        });
-        buttonArr[2].addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Card playerCard = playerDeck.get(2);
-                int index = random.nextInt(validComputerDeck.size());
-                Card compCard = validComputerDeck.remove(index);
-                buttonArr[2].setEnabled(false);
-                compareCards(playerCard, compCard);
-                updateScoreLabel();
-                frame.repaint();
-            }
-        });
-        buttonArr[3].addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Card playerCard = playerDeck.get(3);
-                int index = random.nextInt(validComputerDeck.size());
-                Card compCard = validComputerDeck.remove(index);
-                buttonArr[3].setEnabled(false);
-                compareCards(playerCard, compCard);
-                updateScoreLabel();
-                frame.repaint();
-            }
-        });
-        buttonArr[4].addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Card playerCard = playerDeck.get(4);
-                int index = random.nextInt(validComputerDeck.size());
-                Card compCard = validComputerDeck.remove(index);
-                buttonArr[4].setEnabled(false);
-                compareCards(playerCard, compCard);
-                updateScoreLabel();
-                frame.repaint();
-            }
-        });
+
         score.setText("Player: " + playerPoint + " Computer: " + computerPoint);
         backgroundPanel.add(score);
-        backgroundPanel.add(buttonPanel, BorderLayout.SOUTH);
+        backgroundPanel.add(playButtonPanel, BorderLayout.SOUTH);
+        backgroundPanel.add(playAgainButtonPanel, BorderLayout.NORTH);
         frame.getContentPane().add(backgroundPanel);
         frame.repaint();
         frame.setVisible(true);
@@ -151,10 +119,24 @@ public class CardGame {
         distributeDeck();
     }
 
-    public static void main(String[] args){
-        CardGame game = new CardGame();
+    public void playAgain(){
+        playerPoint = 0;
+        computerPoint = 0;
+        buildDeck();
+        shuffleDeck();
+        distributeDeck();
+        for (JButton button: buttonArr){
+            button.setEnabled(true);
+        }
+
+        updateScoreLabel();
+        validComputerDeck = new ArrayList<>(computerDeck);
+        frame.repaint();
     }
 
+    public static void main(String[] args){
+        new CardGame();
+    }
 
     private class Card {
         private final String suit;
@@ -241,7 +223,6 @@ public class CardGame {
     /**
      * Method will distribute cards from deck to player's and computer's hands.
      * Each deck receives 5 random cards
-     *
      */
     private void distributeDeck(){
         playerDeck = new ArrayList<>(5);
