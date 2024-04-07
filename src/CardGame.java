@@ -39,11 +39,16 @@ public class CardGame {
                 for (int i = 0; i<computerDeck.size(); i++){
                     Card card = computerDeck.get(i);
                     if (validComputerDeck.contains(card)){
+                        /*
                         Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
+                        g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,45, cardWidth,140,null);
+
+                         */
+                        Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/back.png")).getImage();
                         g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,45, cardWidth,140,null);
                     }
                     else{
-                        Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder-X/" + card.toString() + ".png")).getImage();
+                        Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
                         g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,45, cardWidth,140,null);
                     }
                 }
