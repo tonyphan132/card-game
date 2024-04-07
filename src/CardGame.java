@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.*;
+import java.awt.*;
+
 //Points will be earned depending on difference of ranks played.
 public class CardGame {
     ArrayList<Card> deck;
@@ -7,6 +10,21 @@ public class CardGame {
     ArrayList<Card> computerDeck;
     static int playerPoint;
     static int computerPoint;
+    JFrame frame = new JFrame("Card Game");
+    JPanel backgroundPanel = new JPanel(){
+        @Override
+        public void paintComponent(Graphics g){
+            super.paintComponent(g);
+            for (int i = 0; i<playerDeck.size(); i++){
+                Card card = playerDeck.get(i);
+                int cardWidth = 100;
+                Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
+                g.drawImage(cardImage, (cardWidth + 10 ) * i + 15,10, cardWidth,140,null);
+                //+ 15 is offset from the left.
+                //
+            }
+        }
+    };
 
     CardGame(){
         playerPoint = 0;
@@ -14,6 +32,16 @@ public class CardGame {
         buildDeck();
         shuffleDeck();
         distributeDeck();
+        //GUI
+        frame.setSize(700,700);
+        frame.setResizable(false);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //Setting panel + text + buttons
+        backgroundPanel.add(new JLabel("Welcome to The Dueling Card Game"));
+        backgroundPanel.setLayout(new BorderLayout());
+        backgroundPanel.setBackground(new Color(34,145,34));
+        frame.getContentPane().add(backgroundPanel);
     }
 
     public static void main(String[] args){
@@ -74,7 +102,7 @@ public class CardGame {
     private void buildDeck(){
         this.deck = new ArrayList<>(52);
         String[] suitArr = {"Heart", "Diamond", "Club", "Spade"};
-        String[] rankArr = {"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+        String[] rankArr = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
         for (String suit: suitArr){
             for (String rank: rankArr){
                 deck.add(new Card(suit, rank));
@@ -97,9 +125,9 @@ public class CardGame {
     }
 
     private void distributeDeck(){
-        playerDeck = new ArrayList<>(26);
-        computerDeck = new ArrayList<>(26);
-        while(!deck.isEmpty() && deck.size() != 1){
+        playerDeck = new ArrayList<>(5);
+        computerDeck = new ArrayList<>(5);
+        while(playerDeck.size() < 5){
             playerDeck.add(deck.remove(deck.size() - 1));
             computerDeck.add(deck.remove(deck.size() - 1));
         }
