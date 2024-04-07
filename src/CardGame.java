@@ -16,7 +16,7 @@ public class CardGame {
     JButton[] buttonArr = new JButton[5];
     JButton playAgainButton;
     Random random = new Random();
-    JLabel score = new JLabel();
+    JLabel scoreLabel = new JLabel();
     JPanel playAgainButtonPanel = new JPanel();
     JPanel playButtonPanel = new JPanel();
     JPanel backgroundPanel = new JPanel(){
@@ -74,14 +74,12 @@ public class CardGame {
         buttonArr[2] = new JButton("Play card 3");
         buttonArr[3] = new JButton("Play card 4");
         buttonArr[4] = new JButton("Play card 5");
-        for (JButton element: buttonArr){
-            element.setFocusable(false);
-            playButtonPanel.add(element);
-        }
         playAgainButtonPanel.add(playAgainButton);
         validComputerDeck = new ArrayList<>(computerDeck);
         for (int i = 0; i < buttonArr.length; i++){
             int j = i;
+            playButtonPanel.add(buttonArr[i]);
+            buttonArr[i].setFocusable(false);
             buttonArr[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -102,9 +100,9 @@ public class CardGame {
                 playAgain();
             }
         });
-
-        score.setText("Player: " + playerPoint + " Computer: " + computerPoint);
-        backgroundPanel.add(score);
+        updateScoreLabel();
+        backgroundPanel.add(scoreLabel, BorderLayout.EAST);
+        updateScoreLabel();
         backgroundPanel.add(playButtonPanel, BorderLayout.SOUTH);
         backgroundPanel.add(playAgainButtonPanel, BorderLayout.NORTH);
         frame.getContentPane().add(backgroundPanel);
@@ -113,7 +111,7 @@ public class CardGame {
     }
 
     public void updateScoreLabel() {
-        score.setText("Player: " + playerPoint + " Computer: " + computerPoint);
+        scoreLabel.setText("Player: " + playerPoint + " Computer: " + computerPoint + "   ");
     }
 
     public void startGame(){
