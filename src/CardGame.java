@@ -9,6 +9,7 @@ public class CardGame {
     ArrayList<Card> deck;
     ArrayList<Card> playerDeck;
     ArrayList<Card> computerDeck;
+    ArrayList<Card> validComputerDeck;
     static int playerPoint;
     static int computerPoint;
     JFrame frame = new JFrame("Card Game");
@@ -21,17 +22,28 @@ public class CardGame {
         public void paintComponent(Graphics g){
             super.paintComponent(g);
             try{
+                int cardWidth = 100;
                 for (int i = 0; i<playerDeck.size(); i++){
                     Card card = playerDeck.get(i);
-                    int cardWidth = 100;
-                    Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
-                    g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,465, cardWidth,140,null);
+                    if (!buttonArr[i].isEnabled()){
+                        Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder-X/" + card.toString() + ".png")).getImage();
+                        g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,465, cardWidth,140,null);
+                    }
+                    else{
+                        Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
+                        g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,465, cardWidth,140,null);
+                    }
                 }
                 for (int i = 0; i<computerDeck.size(); i++){
                     Card card = computerDeck.get(i);
-                    int cardWidth = 100;
-                    Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
-                    g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,45, cardWidth,140,null);
+                    if (validComputerDeck.contains(card)){
+                        Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
+                        g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,45, cardWidth,140,null);
+                    }
+                    else{
+                        Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder-X/" + card.toString() + ".png")).getImage();
+                        g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,45, cardWidth,140,null);
+                    }
                 }
             }catch(Exception e){
                 System.out.println(e.getMessage());
@@ -58,13 +70,13 @@ public class CardGame {
             element.setFocusable(false);
             buttonPanel.add(element);
         }
-
+        validComputerDeck = new ArrayList<>(computerDeck);
         buttonArr[0].addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Card playerCard = playerDeck.get(0);
-                int index = random.nextInt(computerDeck.size());
-                Card compCard = computerDeck.remove(index);
+                int index = random.nextInt(validComputerDeck.size());
+                Card compCard = validComputerDeck.remove(index);
                 buttonArr[0].setEnabled(false);
                 compareCards(playerCard, compCard);
                 updateScoreLabel();
@@ -75,8 +87,8 @@ public class CardGame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Card playerCard = playerDeck.get(1);
-                int index = random.nextInt(computerDeck.size());
-                Card compCard = computerDeck.remove(index);
+                int index = random.nextInt(validComputerDeck.size());
+                Card compCard = validComputerDeck.remove(index);
                 buttonArr[1].setEnabled(false);
                 compareCards(playerCard, compCard);
                 updateScoreLabel();
@@ -87,8 +99,8 @@ public class CardGame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Card playerCard = playerDeck.get(2);
-                int index = random.nextInt(computerDeck.size());
-                Card compCard = computerDeck.remove(index);
+                int index = random.nextInt(validComputerDeck.size());
+                Card compCard = validComputerDeck.remove(index);
                 buttonArr[2].setEnabled(false);
                 compareCards(playerCard, compCard);
                 updateScoreLabel();
@@ -99,8 +111,8 @@ public class CardGame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Card playerCard = playerDeck.get(3);
-                int index = random.nextInt(computerDeck.size());
-                Card compCard = computerDeck.remove(index);
+                int index = random.nextInt(validComputerDeck.size());
+                Card compCard = validComputerDeck.remove(index);
                 buttonArr[3].setEnabled(false);
                 compareCards(playerCard, compCard);
                 updateScoreLabel();
@@ -111,8 +123,8 @@ public class CardGame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Card playerCard = playerDeck.get(4);
-                int index = random.nextInt(computerDeck.size());
-                Card compCard = computerDeck.remove(index);
+                int index = random.nextInt(validComputerDeck.size());
+                Card compCard = validComputerDeck.remove(index);
                 buttonArr[4].setEnabled(false);
                 compareCards(playerCard, compCard);
                 updateScoreLabel();
