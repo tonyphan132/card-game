@@ -1,3 +1,5 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
@@ -11,37 +13,131 @@ public class CardGame {
     static int playerPoint;
     static int computerPoint;
     JFrame frame = new JFrame("Card Game");
+    JButton[] buttonArr = new JButton[5];
+    Random random = new Random();
+    JLabel score = new JLabel();
+    JPanel buttonPanel = new JPanel();
     JPanel backgroundPanel = new JPanel(){
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
-            for (int i = 0; i<playerDeck.size(); i++){
-                Card card = playerDeck.get(i);
-                int cardWidth = 100;
-                Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
-                g.drawImage(cardImage, (cardWidth + 10 ) * i + 15,10, cardWidth,140,null);
-                //+ 15 is offset from the left.
-                //
+            try{
+                for (int i = 0; i<playerDeck.size(); i++){
+                    Card card = playerDeck.get(i);
+                    int cardWidth = 100;
+                    Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
+                    g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,465, cardWidth,140,null);
+                }
+                for (int i = 0; i<computerDeck.size(); i++){
+                    Card card = computerDeck.get(i);
+                    int cardWidth = 100;
+                    Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
+                    g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,45, cardWidth,140,null);
+                }
+            }catch(Exception e){
+                System.out.println(e.getMessage());
             }
         }
     };
 
     CardGame(){
+        startGame();
+        //GUI
+        frame.setSize(700,700);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //Setting panel + text + buttons
+        backgroundPanel.setLayout(new BorderLayout());
+        backgroundPanel.setBackground(new Color(34,145,34));
+        buttonArr[0] = new JButton("Play card 1!");
+        buttonArr[1] = new JButton("Play card 2!");
+        buttonArr[2] = new JButton("Play card 3!");
+        buttonArr[3] = new JButton("Play card 4!");
+        buttonArr[4] = new JButton("Play card 5!");
+        for (JButton element: buttonArr){
+            element.setFocusable(false);
+            buttonPanel.add(element);
+        }
+
+        buttonArr[0].addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Card playerCard = playerDeck.get(0);
+                int index = random.nextInt(computerDeck.size());
+                Card compCard = computerDeck.remove(index);
+                buttonArr[0].setEnabled(false);
+                compareCards(playerCard, compCard);
+                updateScoreLabel();
+                frame.repaint();
+            }
+        });
+        buttonArr[1].addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Card playerCard = playerDeck.get(1);
+                int index = random.nextInt(computerDeck.size());
+                Card compCard = computerDeck.remove(index);
+                buttonArr[1].setEnabled(false);
+                compareCards(playerCard, compCard);
+                updateScoreLabel();
+                frame.repaint();
+            }
+        });
+        buttonArr[2].addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Card playerCard = playerDeck.get(2);
+                int index = random.nextInt(computerDeck.size());
+                Card compCard = computerDeck.remove(index);
+                buttonArr[2].setEnabled(false);
+                compareCards(playerCard, compCard);
+                updateScoreLabel();
+                frame.repaint();
+            }
+        });
+        buttonArr[3].addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Card playerCard = playerDeck.get(3);
+                int index = random.nextInt(computerDeck.size());
+                Card compCard = computerDeck.remove(index);
+                buttonArr[3].setEnabled(false);
+                compareCards(playerCard, compCard);
+                updateScoreLabel();
+                frame.repaint();
+            }
+        });
+        buttonArr[4].addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Card playerCard = playerDeck.get(4);
+                int index = random.nextInt(computerDeck.size());
+                Card compCard = computerDeck.remove(index);
+                buttonArr[4].setEnabled(false);
+                compareCards(playerCard, compCard);
+                updateScoreLabel();
+                frame.repaint();
+            }
+        });
+        score.setText("Player: " + playerPoint + " Computer: " + computerPoint);
+        backgroundPanel.add(score);
+        backgroundPanel.add(buttonPanel, BorderLayout.SOUTH);
+        frame.getContentPane().add(backgroundPanel);
+        frame.repaint();
+        frame.setVisible(true);
+    }
+
+    public void updateScoreLabel() {
+        score.setText("Player: " + playerPoint + " Computer: " + computerPoint);
+    }
+
+    public void startGame(){
         playerPoint = 0;
         computerPoint = 0;
         buildDeck();
         shuffleDeck();
         distributeDeck();
-        //GUI
-        frame.setSize(700,700);
-        frame.setResizable(false);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //Setting panel + text + buttons
-        backgroundPanel.add(new JLabel("Welcome to The Dueling Card Game"));
-        backgroundPanel.setLayout(new BorderLayout());
-        backgroundPanel.setBackground(new Color(34,145,34));
-        frame.getContentPane().add(backgroundPanel);
     }
 
     public static void main(String[] args){
@@ -87,15 +183,16 @@ public class CardGame {
             return suit + "-" + rank;
         }
 
-        public static void compareCards(Card playerCard, Card computerCard){
-            int playerCardValue = playerCard.getCardValue();
-            int computerCardValue = computerCard.getCardValue();
-            if (playerCardValue > computerCardValue){
-                playerPoint = playerPoint + (playerCardValue - computerCardValue);
-            }
-            else if (playerCardValue < computerCardValue){
-                computerPoint = computerPoint + (computerCardValue - playerCardValue);
-            }
+    }
+
+    public static void compareCards(Card playerCard, Card computerCard){
+        int playerCardValue = playerCard.getCardValue();
+        int computerCardValue = computerCard.getCardValue();
+        if (playerCardValue > computerCardValue){
+            playerPoint = playerPoint + (playerCardValue - computerCardValue);
+        }
+        else if (playerCardValue < computerCardValue){
+            computerPoint = computerPoint + (computerCardValue - playerCardValue);
         }
     }
 
@@ -111,7 +208,6 @@ public class CardGame {
     }
 
     private void shuffleDeck(){
-        Random random = new Random();
         for (int i = 0; i < 260; i++){
             int index1 = random.nextInt(52);
             int index2;
