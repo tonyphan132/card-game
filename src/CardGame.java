@@ -66,7 +66,8 @@ public class CardGame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Setting panel + text + buttons
-        backgroundPanel.setLayout(new BorderLayout());
+        //backgroundPanel.setLayout(new BorderLayout());
+        backgroundPanel.setLayout(null);
         backgroundPanel.setBackground(new Color(34,145,34));
         playAgainButton = new JButton("Play again");
         buttonArr[0] = new JButton("Play card 1");
@@ -100,11 +101,23 @@ public class CardGame {
                 playAgain();
             }
         });
+
         updateScoreLabel();
-        backgroundPanel.add(scoreLabel, BorderLayout.EAST);
+        //scoreLabel.setHorizontalAlignment(JLabel.);
+        //scoreLabel.setVerticalAlignment(JLabel.LEFT);
+        scoreLabel.setBounds(275,275,200,100);
+        backgroundPanel.add(scoreLabel);
         updateScoreLabel();
-        backgroundPanel.add(playButtonPanel, BorderLayout.SOUTH);
-        backgroundPanel.add(playAgainButtonPanel, BorderLayout.NORTH);
+
+        
+        playButtonPanel.setBounds(0,635,700,200);
+        backgroundPanel.add(playButtonPanel);
+
+        playAgainButtonPanel.setBounds(0,0,700,34);
+        backgroundPanel.add(playAgainButtonPanel);
+        backgroundPanel.setBounds(0,0,700,700);
+
+        frame.setLayout(null);
         frame.getContentPane().add(backgroundPanel);
         frame.repaint();
         frame.setVisible(true);
