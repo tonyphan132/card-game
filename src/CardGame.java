@@ -1,6 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 import javax.swing.*;
 import java.awt.*;
@@ -27,30 +28,25 @@ public class CardGame {
                 int cardWidth = 100;
                 for (int i = 0; i<playerDeck.size(); i++){
                     Card card = playerDeck.get(i);
+                    Image cardImage;
                     if (!buttonArr[i].isEnabled()){
-                        Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder-X/" + card.toString() + ".png")).getImage();
-                        g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,465, cardWidth,140,null);
+                        cardImage = new ImageIcon(getClass().getResource("./Card-Folder-X/" + card.toString() + ".png")).getImage();
                     }
                     else{
-                        Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
-                        g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,465, cardWidth,140,null);
+                        cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
                     }
+                    g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,465, cardWidth,140,null);
                 }
                 for (int i = 0; i<computerDeck.size(); i++){
                     Card card = computerDeck.get(i);
+                    Image cardImage;
                     if (validComputerDeck.contains(card)){
-                        /*
-                        Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
-                        g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,45, cardWidth,140,null);
-
-                         */
-                        Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/back.png")).getImage();
-                        g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,45, cardWidth,140,null);
+                        cardImage = new ImageIcon(getClass().getResource("./Card-Folder/back.png")).getImage();
                     }
                     else{
-                        Image cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
-                        g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,45, cardWidth,140,null);
+                        cardImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("./Card-Folder/" + card.toString() + ".png"))).getImage();
                     }
+                    g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,45, cardWidth,140,null);
                 }
             }catch(Exception e){
                 System.out.println(e.getMessage());
@@ -88,7 +84,7 @@ public class CardGame {
                     int index = random.nextInt(validComputerDeck.size());
                     Card compCard = validComputerDeck.remove(index);
                     buttonArr[j].setEnabled(false);
-                    compareCards(playerCard, compCard);
+                    Card.compareCards(playerCard, compCard);
                     updateScoreLabel();
                     frame.repaint();
                 }
@@ -162,15 +158,6 @@ public class CardGame {
             this.suit = suit;
             this.rank = rank;
         }
-
-        public String getSuit() {
-            return suit;
-        }
-
-        public String getRank() {
-            return rank;
-        }
-
         public int getCardValue(){
             String faceCards = "AKQJ";
             if (faceCards.contains(rank)){
@@ -192,8 +179,18 @@ public class CardGame {
             return suit + "-" + rank;
         }
 
+        public static void compareCards(Card playerCard, Card computerCard){
+            int playerCardValue = playerCard.getCardValue();
+            int computerCardValue = computerCard.getCardValue();
+            if (playerCardValue > computerCardValue){
+                playerPoint = playerPoint + (playerCardValue - computerCardValue);
+            }
+            else if (playerCardValue < computerCardValue){
+                computerPoint = computerPoint + (computerCardValue - playerCardValue);
+            }
+        }
     }
-
+    /*
     public static void compareCards(Card playerCard, Card computerCard){
         int playerCardValue = playerCard.getCardValue();
         int computerCardValue = computerCard.getCardValue();
@@ -204,6 +201,8 @@ public class CardGame {
             computerPoint = computerPoint + (computerCardValue - playerCardValue);
         }
     }
+
+     */
 
     /**
      * Method will build a deck of 52 cards using a combination of 13 values and of 4 suits.
@@ -244,8 +243,8 @@ public class CardGame {
         playerDeck = new ArrayList<>(5);
         computerDeck = new ArrayList<>(5);
         while(playerDeck.size() < 5){
-            playerDeck.add(deck.remove(deck.size() - 1));
-            computerDeck.add(deck.remove(deck.size() - 1));
+            playerDeck.add(deck.removeLast());
+            computerDeck.add(deck.removeLast());
         }
     }
 }
