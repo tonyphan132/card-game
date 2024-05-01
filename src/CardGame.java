@@ -30,10 +30,10 @@ public class CardGame {
                     Card card = playerDeck.get(i);
                     Image cardImage;
                     if (!buttonArr[i].isEnabled()){
-                        cardImage = new ImageIcon(getClass().getResource("./Card-Folder-X/" + card.toString() + ".png")).getImage();
+                        cardImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("./Card-Folder-X/" + card.toString() + ".png"))).getImage();
                     }
                     else{
-                        cardImage = new ImageIcon(getClass().getResource("./Card-Folder/" + card.toString() + ".png")).getImage();
+                        cardImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("./Card-Folder/" + card.toString() + ".png"))).getImage();
                     }
                     g.drawImage(cardImage, (cardWidth + 25 ) * i + 45,465, cardWidth,140,null);
                 }
@@ -41,7 +41,7 @@ public class CardGame {
                     Card card = computerDeck.get(i);
                     Image cardImage;
                     if (validComputerDeck.contains(card)){
-                        cardImage = new ImageIcon(getClass().getResource("./Card-Folder/back.png")).getImage();
+                        cardImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("./Card-Folder/back.png"))).getImage();
                     }
                     else{
                         cardImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("./Card-Folder/" + card.toString() + ".png"))).getImage();
@@ -190,19 +190,6 @@ public class CardGame {
             }
         }
     }
-    /*
-    public static void compareCards(Card playerCard, Card computerCard){
-        int playerCardValue = playerCard.getCardValue();
-        int computerCardValue = computerCard.getCardValue();
-        if (playerCardValue > computerCardValue){
-            playerPoint = playerPoint + (playerCardValue - computerCardValue);
-        }
-        else if (playerCardValue < computerCardValue){
-            computerPoint = computerPoint + (computerCardValue - playerCardValue);
-        }
-    }
-
-     */
 
     /**
      * Method will build a deck of 52 cards using a combination of 13 values and of 4 suits.
